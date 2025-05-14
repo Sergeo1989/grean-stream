@@ -9,8 +9,6 @@ import Register from './pages/auth/Register.tsx'
 import ProtectedRoutes from './services/ProtectedRoutes.tsx'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
       <Routes>

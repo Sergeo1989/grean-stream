@@ -1,16 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router'
-import AuthUser from '../../contexts/auth/AuthUser'
-
-const createAuthUser = (
-  user: AuthUser
-): { displayName: string; username: string; uid: string } => {
-  return {
-    displayName: user.displayName || '',
-    username: user.username || '',
-    uid: user.uid || '',
-  }
-}
 
 const LoginForm = () => {
   const navigate = useNavigate()
@@ -26,13 +15,6 @@ const LoginForm = () => {
       user.username === inputs.username &&
       user.password === inputs.password
     ) {
-      const authUser = createAuthUser({
-        displayName: user.firstname + ' ' + user.lastname,
-        username: user.username,
-        uid: user.password,
-      })
-      console.log(authUser)
-      sessionStorage.setItem('loggedInuser', JSON.stringify(authUser))
       navigate('/')
     } else {
       alert('Mouf reste ici')
