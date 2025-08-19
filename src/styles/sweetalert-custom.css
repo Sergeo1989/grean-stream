@@ -1,0 +1,283 @@
+/* Style personnalisé pour SweetAlert2 - Compatible tous navigateurs */
+
+/* Container principal */
+.swal2-popup {
+  border-radius: 12px !important;
+  border: none !important;
+  max-width: 28rem !important;
+  padding: 2rem !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(10px) !important;
+  font-family: inherit !important;
+}
+
+/* Titre */
+.swal2-title {
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  color: #111827 !important;
+  margin: 0 0 0.5rem 0 !important;
+  line-height: 1.5 !important;
+}
+
+/* Contenu/texte */
+.swal2-html-container {
+  font-size: 0.875rem !important;
+  color: #6b7280 !important;
+  line-height: 1.6 !important;
+  margin: 0 0 1.5rem 0 !important;
+}
+
+/* Icônes - Correction alignement */
+.swal2-icon {
+  width: 3.5rem !important;
+  height: 3.5rem !important;
+  margin: 0 auto 1rem auto !important;
+  border: none !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Icône de succès - Correction alignement */
+.swal2-icon.swal2-success {
+  color: #10b981 !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-ring {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 100% !important;
+  height: 100% !important;
+  border: 4px solid #d1fae5 !important;
+  border-radius: 50% !important;
+}
+
+.swal2-icon.swal2-success .swal2-success-fix {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 60% !important;
+  height: 120% !important;
+  background-color: white !important;
+}
+
+.swal2-icon.swal2-success::after {
+  content: '✓' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  color: #10b981 !important;
+}
+
+/* Icône d'erreur - Correction alignement */
+.swal2-icon.swal2-error {
+  color: #ef4444 !important;
+}
+
+.swal2-icon.swal2-error .swal2-x-mark-line-left,
+.swal2-icon.swal2-error .swal2-x-mark-line-right {
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  width: 2px !important;
+  height: 2rem !important;
+  background-color: #ef4444 !important;
+}
+
+.swal2-icon.swal2-error .swal2-x-mark-line-left {
+  transform: translate(-50%, -50%) rotate(45deg) !important;
+}
+
+.swal2-icon.swal2-error .swal2-x-mark-line-right {
+  transform: translate(-50%, -50%) rotate(-45deg) !important;
+}
+
+.swal2-icon.swal2-error::after {
+  content: '✕' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+  color: #ef4444 !important;
+}
+
+/* Autres icônes */
+.swal2-icon.swal2-warning {
+  color: #f59e0b !important;
+}
+
+.swal2-icon.swal2-warning::after {
+  content: '⚠' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 1.5rem !important;
+}
+
+.swal2-icon.swal2-info {
+  color: #3b82f6 !important;
+}
+
+.swal2-icon.swal2-info::after {
+  content: 'ℹ' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 1.5rem !important;
+}
+
+.swal2-icon.swal2-question {
+  color: #6366f1 !important;
+}
+
+.swal2-icon.swal2-question::after {
+  content: '?' !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  font-size: 1.5rem !important;
+  font-weight: bold !important;
+}
+
+/* Boutons */
+.swal2-actions {
+  gap: 0.75rem !important;
+  margin: 0 !important;
+}
+
+.swal2-confirm,
+.swal2-cancel {
+  border-radius: 8px !important;
+  font-weight: 500 !important;
+  font-size: 0.875rem !important;
+  padding: 0.625rem 1.25rem !important;
+  border: 1px solid transparent !important;
+  transition: all 0.15s ease !important;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05) !important;
+}
+
+.swal2-confirm {
+  background-color: #3b82f6 !important;
+  color: white !important;
+}
+
+.swal2-confirm:hover {
+  background-color: #2563eb !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+.swal2-cancel {
+  background-color: #f3f4f6 !important;
+  color: #374151 !important;
+  border-color: #d1d5db !important;
+}
+
+.swal2-cancel:hover {
+  background-color: #e5e7eb !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Toast notifications */
+.swal2-toast {
+  border-radius: 12px !important;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(0, 0, 0, 0.05) !important;
+  backdrop-filter: blur(10px) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+.swal2-toast .swal2-title {
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  color: #111827 !important;
+  margin: 0 !important;
+}
+
+.swal2-toast .swal2-icon {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
+  margin: 0 !important;
+}
+
+/* Progress bar pour le timer */
+.swal2-timer-progress-bar {
+  background-color: rgba(59, 130, 246, 0.8) !important;
+  height: 3px !important;
+}
+
+/* Overlay */
+.swal2-backdrop {
+  background: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* Animation d'entrée personnalisée */
+.swal2-show {
+  animation: swal2-show-custom 0.3s ease-out !important;
+}
+
+@keyframes swal2-show-custom {
+  0% {
+    opacity: 0;
+    transform: scale(0.7) translateY(-1rem);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Loading */
+.swal2-loading .swal2-title {
+  margin-bottom: 1rem !important;
+}
+
+.swal2-loader {
+  border-color: #e5e7eb #e5e7eb #e5e7eb #3b82f6 !important;
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .swal2-popup {
+    background: #1f2937 !important;
+    color: #f9fafb !important;
+  }
+  
+  .swal2-title {
+    color: #f9fafb !important;
+  }
+  
+  .swal2-html-container {
+    color: #d1d5db !important;
+  }
+  
+  .swal2-cancel {
+    background-color: #374151 !important;
+    color: #f9fafb !important;
+    border-color: #4b5563 !important;
+  }
+  
+  .swal2-cancel:hover {
+    background-color: #4b5563 !important;
+  }
+  
+  .swal2-toast {
+    background: rgba(31, 41, 55, 0.95) !important;
+    border-color: rgba(75, 85, 99, 0.3) !important;
+  }
+}
