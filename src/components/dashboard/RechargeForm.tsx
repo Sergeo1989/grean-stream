@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import FormField from '@/components/ui/FormField';
+import LoadingButton from '@/components/ui/LoadingButton';
 import { User } from '@/types/User';
 import { PaymentMethod, PaymentMethodLabels } from '@/types/enums';
 
@@ -19,13 +19,15 @@ interface RechargeFormProps {
     subscriberMsisdn: string;
   }) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
+  isLoading?: boolean;
 }
 
 const RechargeForm: React.FC<RechargeFormProps> = ({
   user,
   rechargeForm,
   onRechargeFormChange,
-  onSubmit
+  onSubmit,
+  isLoading = false,
 }) => {
   // Fonction pour obtenir les compteurs disponibles
   const getAvailableMeters = () => {
@@ -42,29 +44,37 @@ const RechargeForm: React.FC<RechargeFormProps> = ({
   const handleInputChange = (field: string, value: string | number) => {
     const updatedForm = {
       ...rechargeForm,
-      [field]: field === 'payment_method' ? value as PaymentMethod : value.toString()
+      [field]:
+        field === 'payment_method'
+          ? (value as PaymentMethod)
+          : value.toString(),
     };
     onRechargeFormChange(updatedForm);
   };
 
-  const meterOptions = getAvailableMeters().map(meter => ({
+  const meterOptions = getAvailableMeters().map((meter) => ({
     value: meter.number.toString(),
-    label: `${meter.name} - N°${meter.number}`
+    label: `${meter.name} - N°${meter.number}`,
   }));
 
-  const paymentMethodOptions = Object.entries(PaymentMethodLabels).map(([value, label]) => ({
-    value,
-    label
-  }));
+  const paymentMethodOptions = Object.entries(PaymentMethodLabels).map(
+    ([value, label]) => ({
+      value,
+      label,
+    })
+  );
 
-  const requiresPhone = [PaymentMethod.OM, PaymentMethod.MOMO].includes(rechargeForm.payment_method);
+  const requiresPhone = [PaymentMethod.OM, PaymentMethod.MOMO].includes(
+    rechargeForm.payment_method
+  );
+
 
   return (
     <div className='bg-white rounded-lg shadow-sm p-4 sm:p-6 border border-gray-200'>
       <h3 className='text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6'>
         Effectuer une recharge
       </h3>
-      
+
       <form onSubmit={onSubmit} className='space-y-6'>
         {/* Ligne principale avec les 3 champs essentiels */}
         <div className='grid grid-cols-1 lg:grid-cols-3 gap-4'>
@@ -79,7 +89,9 @@ const RechargeForm: React.FC<RechargeFormProps> = ({
             selectPlaceholder='Choisir un compteur'
             onChange={(value) => handleInputChange('meter', value)}
             required
-            helperText={`${getAvailableMeters().length} compteur(s) disponible(s)`}
+            helperText={`${
+              getAvailableMeters().length
+            } compteur(s) disponible(s)`}
           />
 
           {/* Montant */}
@@ -118,7 +130,7 @@ const RechargeForm: React.FC<RechargeFormProps> = ({
               type='tel'
               label='Numéro du payeur'
               value={rechargeForm.subscriberMsisdn}
-              placeholder='+237 6XX XXX XXX'
+              placeholder='6XX XXX XXX'
               onChange={(value) => handleInputChange('subscriberMsisdn', value)}
               required
               prefix='📱'
@@ -137,24 +149,42 @@ const RechargeForm: React.FC<RechargeFormProps> = ({
               Résumé de la recharge
             </h4>
             <div className='space-y-1 text-sm text-gray-600'>
-              <p><strong>Compteur:</strong> {meterOptions.find(m => m.value === rechargeForm.meter)?.label || rechargeForm.meter}</p>
-              <p><strong>Montant:</strong> {rechargeForm.amount} XAF</p>
-              <p><strong>Méthode:</strong> {PaymentMethodLabels[rechargeForm.payment_method]}</p>
+              <p>
+                <strong>Compteur:</strong>{' '}
+                {meterOptions.find((m) => m.value === rechargeForm.meter)
+                  ?.label || rechargeForm.meter}
+              </p>
+              <p>
+                <strong>Montant:</strong> {rechargeForm.amount} XAF
+              </p>
+              <p>
+                <strong>Méthode:</strong>{' '}
+                {PaymentMethodLabels[rechargeForm.payment_method]}
+              </p>
               {requiresPhone && rechargeForm.subscriberMsisdn && (
-                <p><strong>Numéro payeur:</strong> {rechargeForm.subscriberMsisdn}</p>
+                <p>
+                  <strong>Numéro payeur:</strong>{' '}
+                  {rechargeForm.subscriberMsisdn}
+                </p>
               )}
             </div>
           </div>
         )}
 
         <div className='flex justify-end pt-4'>
-          <Button 
+          <LoadingButton
             type='submit'
             className='px-6 py-2'
-            disabled={!rechargeForm.meter || !rechargeForm.amount || (requiresPhone && !rechargeForm.subscriberMsisdn)}
+            isLoading={isLoading}
+            loadingText='Traitement en cours...'
+            disabled={
+              !rechargeForm.meter ||
+              !rechargeForm.amount ||
+              (requiresPhone && !rechargeForm.subscriberMsisdn)
+            }
           >
             Effectuer la recharge
-          </Button>
+          </LoadingButton>
         </div>
       </form>
     </div>

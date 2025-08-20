@@ -22,12 +22,12 @@ class ApiService {
 
   private constructor() {
     this.api = axios.create({
-      baseURL: 'http://www.gs.montviewfarm.net/api/',
+      baseURL: 'https://www.gs.montviewfarm.net/api/',
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      timeout: 15000, // 15 secondes
+      timeout: 180000, // 15 secondes
       withCredentials: true, // Important pour les cookies HTTP-only
     });
 
@@ -50,7 +50,6 @@ class ApiService {
     }
     return ApiService.instance;
   }
-
 
   private formatError(error: AxiosError): Error {
     if (error.response?.data) {
@@ -209,12 +208,7 @@ class ApiService {
     rechargeData: RechargeData
   ): Promise<AxiosResponse<RechargeResponse>> {
     // Validation des données
-    const requiredFields = [
-      'user_id',
-      'meter',
-      'amount',
-      'payment_method',
-    ];
+    const requiredFields = ['user_id', 'meter', 'amount', 'payment_method'];
     for (const field of requiredFields) {
       if (!rechargeData[field as keyof RechargeData]) {
         throw new Error(`Le champ ${field} est requis`);

@@ -3,24 +3,22 @@ import { useLogin } from '@/hooks/useLogin';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import { showError, showSuccess } from '@/lib/alerts';
+import { useFormSubmission } from '@/hooks/useFormSubmission';
+import LoadingButton from '@/components/ui/LoadingButton';
 
 const LoginForm = () => {
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { setUser, refreshUser } = useAuth();
   const login = useLogin();
+  const loginSubmission = useFormSubmission();
   const [inputs, setInputs] = useState({
     email: '', // Changé de username à email pour correspondre à l'API
     password: '',
   });
-  // Supprime le state error car on utilise SweetAlert2
-  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Plus besoin de reset error avec SweetAlert2
-    setIsLoading(true);
-
-    try {
+    await loginSubmission.handleSubmit(async () => {
       // Validation basique côté client
       if (!inputs.email || !inputs.password) {
         showError('Champs requis', 'Veuillez remplir tous les champs');
@@ -34,20 +32,14 @@ const LoginForm = () => {
       // Mise à jour du contexte d'authentification
       if (response.user) {
         setUser(response.user);
+        // Rafraîchir les données utilisateur complètes depuis le serveur
+        await refreshUser();
         showSuccess('Connexion réussie', `Bienvenue ${response.user.name} !`);
         setTimeout(() => navigate('/dashboard'), 1500);
       } else {
         throw new Error('Réponse invalide du serveur');
       }
-    } catch (error) {
-      const errorMessage =
-        error instanceof Error
-          ? error.message
-          : 'Échec de connexion. Veuillez réessayer.';
-      showError('Erreur de connexion', errorMessage);
-    } finally {
-      setIsLoading(false);
-    }
+    });
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,7 +62,7 @@ const LoginForm = () => {
             name='email'
             value={inputs.email}
             onChange={handleInputChange}
-            disabled={isLoading}
+            disabled={loginSubmission.isLoading}
             required
             autoComplete='email'
             className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600'
@@ -87,7 +79,7 @@ const LoginForm = () => {
             name='password'
             value={inputs.password}
             onChange={handleInputChange}
-            disabled={isLoading}
+            disabled={loginSubmission.isLoading}
             required
             autoComplete='current-password'
             className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600'
@@ -101,13 +93,14 @@ const LoginForm = () => {
         </div>
 
         <div className='mt-6 block w-full'>
-          <button
+          <LoadingButton
             type='submit'
-            disabled={isLoading}
-            className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-70 disabled:cursor-not-allowed'
+            isLoading={loginSubmission.isLoading}
+            loadingText='Connexion...'
+            className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
           >
-            {isLoading ? 'Connexion...' : 'Se connecter'}
-          </button>
+            Se connecter
+          </LoadingButton>
         </div>
       </div>
     </form>

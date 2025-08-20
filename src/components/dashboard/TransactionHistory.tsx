@@ -24,13 +24,42 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   onPageChange,
 }) => {
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('fr-FR', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
+    const date = new Date(dateString);
+    const now = new Date();
+    
+    // Réinitialiser les heures pour comparer seulement les dates
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const targetDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    
+    // Calculer la différence en jours
+    const diffTime = today.getTime() - targetDate.getTime();
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+    
+    // Formatage de l'heure
+    const timeFormat = date.toLocaleTimeString('fr-FR', {
       hour: '2-digit',
       minute: '2-digit',
     });
+    
+    if (diffDays === 0) {
+      return `Aujourd'hui à ${timeFormat}`;
+    } else if (diffDays === 1) {
+      return `Hier à ${timeFormat}`;
+    } else if (diffDays > 1 && diffDays <= 7) {
+      // Afficher le jour de la semaine pour la dernière semaine
+      const dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+      const capitalizedDay = dayName.charAt(0).toUpperCase() + dayName.slice(1);
+      return `${capitalizedDay} à ${timeFormat}`;
+    } else {
+      // Format de date complet pour les dates plus anciennes
+      return date.toLocaleDateString('fr-FR', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
   };
 
   const getStatusBadgeColor = (status: number) => {
@@ -112,7 +141,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({
             {recharges.map((recharge) => (
               <tr key={recharge.id} className='hover:bg-gray-50'>
                 <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
-                  {formatDate(recharge.created_at)}
+                  {formatDate(recharge.updated_at)}
                 </td>
                 <td className='px-6 py-4 whitespace-nowrap text-sm text-gray-900'>
                   N°{recharge.meter_id}
@@ -154,7 +183,7 @@ const TransactionHistory: React.FC<TransactionHistoryProps> = ({
             <div className='flex justify-between items-start'>
               <div>
                 <div className='text-sm font-medium text-gray-900'>
-                  {formatDate(recharge.created_at)}
+                  {formatDate(recharge.updated_at)}
                 </div>
                 <div className='text-xs text-gray-500 mt-1'>
                   Compteur N°{recharge.meter_id}

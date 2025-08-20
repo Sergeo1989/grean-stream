@@ -1,0 +1,62 @@
+# Configuration Apache pour SPA React
+# Redirection de toutes les routes vers index.html pour le routage côté client
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  
+  # Gestion des fichiers statiques (ne pas rediriger)
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  
+  # Exclure les fichiers d'assets (CSS, JS, images, etc.)
+  RewriteCond %{REQUEST_URI} !\.(?:css|js|map|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot)$ [NC]
+  
+  # Rediriger toutes les autres requêtes vers index.html
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Configuration du cache pour les assets statiques
+<IfModule mod_expires.c>
+  ExpiresActive on
+  
+  # Cache des images
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/jpg "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/gif "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType image/ico "access plus 1 year"
+  ExpiresByType image/x-icon "access plus 1 year"
+  
+  # Cache des polices
+  ExpiresByType font/woff "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType application/font-woff "access plus 1 year"
+  ExpiresByType application/font-woff2 "access plus 1 year"
+  
+  # Cache des fichiers CSS et JS
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType text/javascript "access plus 1 year"
+  
+  # Cache du HTML (court pour permettre les mises à jour)
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+# Configuration de sécurité
+<IfModule mod_headers.c>
+  # Désactiver l'affichage des erreurs de serveur
+  Header always set X-Content-Type-Options nosniff
+  Header always set X-Frame-Options DENY
+  Header always set X-XSS-Protection "1; mode=block"
+  
+  # Politique de référent
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  
+  # Cache control pour index.html
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache, no-store, must-revalidate"
+    Header set Pragma "no-cache"
+    Header set Expires 0
+  </FilesMatch>
+</IfModule>

@@ -6,6 +6,7 @@ import { Recharge } from '@/types/api.types';
 import { showSuccess, showError } from '@/lib/alerts';
 import { PaymentMethod, DashboardTab } from '@/types/enums';
 import { formValidator } from '@/lib/validation';
+import { useFormSubmission } from '@/hooks/useFormSubmission';
 
 // Import dashboard components
 import {
@@ -21,6 +22,10 @@ const Dashboard: React.FC = () => {
   const { user, logout } = useAuth();
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<DashboardTab>(DashboardTab.PROFILE);
+  
+  // Hooks de gestion des formulaires
+  const profileSubmission = useFormSubmission();
+  const rechargeSubmission = useFormSubmission();
   const [recharges, setRecharges] = useState<Recharge[]>([]);
   const [paginationData, setPaginationData] = useState({
     currentPage: 1,
@@ -119,7 +124,7 @@ const Dashboard: React.FC = () => {
 
   const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
+    await profileSubmission.handleSubmit(async () => {
       if (!user?.id) {
         showError('Erreur', 'Informations utilisateur manquantes');
         return;
@@ -135,15 +140,12 @@ const Dashboard: React.FC = () => {
 
       await api.updateProfile(updateData);
       showSuccess('Succès', 'Profil mis à jour avec succès');
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue';
-      showError('Erreur lors de la mise à jour', errorMessage);
-    }
+    });
   };
 
   const handleRecharge = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
+    await rechargeSubmission.handleSubmit(async () => {
       if (!user?.id) {
         showError('Erreur', 'Informations utilisateur manquantes');
         return;
@@ -187,10 +189,7 @@ const Dashboard: React.FC = () => {
         payment_method: PaymentMethod.CASH,
         subscriberMsisdn: '',
       });
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Une erreur est survenue';
-      showError('Erreur lors de la recharge', errorMessage);
-    }
+    });
   };
 
   // Fonction pour gérer le changement de page
@@ -227,6 +226,7 @@ const Dashboard: React.FC = () => {
               profileData={profileData}
               onProfileDataChange={setProfileData}
               onSubmit={handleProfileUpdate}
+              isLoading={profileSubmission.isLoading}
             />
           </div>
         )}
@@ -238,6 +238,7 @@ const Dashboard: React.FC = () => {
             rechargeForm={rechargeForm}
             onRechargeFormChange={setRechargeForm}
             onSubmit={handleRecharge}
+            isLoading={rechargeSubmission.isLoading}
           />
         )}
 

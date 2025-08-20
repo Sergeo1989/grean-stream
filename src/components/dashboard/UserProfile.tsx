@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import FormField from '@/components/ui/FormField';
+import LoadingButton from '@/components/ui/LoadingButton';
 import { User } from '@/types/User';
 
 interface UserProfileProps {
@@ -13,13 +13,15 @@ interface UserProfileProps {
   };
   onProfileDataChange: (data: { name: string; phone: string; address: string; email: string }) => void;
   onSubmit: (e: React.FormEvent) => Promise<void>;
+  isLoading?: boolean;
 }
 
 const UserProfile: React.FC<UserProfileProps> = ({
   user,
   profileData,
   onProfileDataChange,
-  onSubmit
+  onSubmit,
+  isLoading = false
 }) => {
   const handleInputChange = (field: string, value: string | number) => {
     onProfileDataChange({
@@ -154,12 +156,14 @@ const UserProfile: React.FC<UserProfileProps> = ({
           </div>
           
           <div className='flex justify-end pt-4'>
-            <Button 
+            <LoadingButton 
               type='submit'
               className='px-6 py-2'
+              isLoading={isLoading}
+              loadingText='Mise à jour...'
             >
               Mettre à jour le profil
-            </Button>
+            </LoadingButton>
           </div>
         </form>
       </div>

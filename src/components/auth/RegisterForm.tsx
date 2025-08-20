@@ -4,10 +4,13 @@ import { z } from 'zod';
 import { useRegister } from '@/hooks/useRegister';
 import { registerSchema } from '@/lib/validators';
 import { showError, showSuccess, showWarning } from '@/lib/alerts';
+import { useFormSubmission } from '@/hooks/useFormSubmission';
+import LoadingButton from '@/components/ui/LoadingButton';
 
 const RegisterForm = () => {
   const navigate = useNavigate();
   const register = useRegister();
+  const registerSubmission = useFormSubmission();
   const [inputs, setInputs] = useState({
     email: '',
     firstName: '',
@@ -19,8 +22,6 @@ const RegisterForm = () => {
     address: '',
     meter_type: 1,
   });
-  // Utilise SweetAlert2 pour les erreurs au lieu du state local
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validateForm = () => {
     try {
@@ -64,11 +65,8 @@ const RegisterForm = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsSubmitting(true);
-
-    try {
+    await registerSubmission.handleSubmit(async () => {
       if (!validateForm()) {
-        setIsSubmitting(false);
         return;
       }
 
@@ -87,13 +85,7 @@ const RegisterForm = () => {
       await register.mutateAsync(registrationData);
       showSuccess('Inscription réussie', 'Votre compte a été créé avec succès !');
       setTimeout(() => navigate('/login'), 2000);
-    } catch (error) {
-      console.error('Registration error:', error);
-      const errorMessage = error instanceof Error ? error.message : "Échec d'inscription. Veuillez réessayer.";
-      showError('Erreur d\'inscription', errorMessage);
-    } finally {
-      setIsSubmitting(false);
-    }
+    });
   };
 
   return (
@@ -111,7 +103,7 @@ const RegisterForm = () => {
             name='firstName'
             value={inputs.firstName}
             onChange={handleInputChange}
-            disabled={isSubmitting}
+            disabled={registerSubmission.isLoading}
             className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600'
           />
           {/* Erreurs gérées par SweetAlert2 */}
@@ -127,7 +119,7 @@ const RegisterForm = () => {
             name='lastName'
             value={inputs.lastName}
             onChange={handleInputChange}
-            disabled={isSubmitting}
+            disabled={registerSubmission.isLoading}
             className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600'
           />
           {/* Erreurs gérées par SweetAlert2 */}
@@ -143,7 +135,7 @@ const RegisterForm = () => {
             name='email'
             value={inputs.email}
             onChange={handleInputChange}
-            disabled={isSubmitting}
+            disabled={registerSubmission.isLoading}
             className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600'
           />
           {/* Erreurs gérées par SweetAlert2 */}
@@ -159,7 +151,7 @@ const RegisterForm = () => {
             name='code'
             value={inputs.code}
             onChange={handleInputChange}
-            disabled={isSubmitting}
+            disabled={registerSubmission.isLoading}
             className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600'
           />
           {/* Erreurs gérées par SweetAlert2 */}
@@ -175,7 +167,7 @@ const RegisterForm = () => {
             name='password'
             value={inputs.password}
             onChange={handleInputChange}
-            disabled={isSubmitting}
+            disabled={registerSubmission.isLoading}
             className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600'
           />
           {/* Erreurs gérées par SweetAlert2 */}
@@ -191,20 +183,21 @@ const RegisterForm = () => {
             name='confirmPassword'
             value={inputs.confirmPassword}
             onChange={handleInputChange}
-            disabled={isSubmitting}
+            disabled={registerSubmission.isLoading}
             className='block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600'
           />
           {/* Erreurs gérées par SweetAlert2 */}
         </div>
 
         <div className='mt-6'>
-          <button
+          <LoadingButton
             type='submit'
-            disabled={isSubmitting}
-            className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:bg-indigo-400'
+            isLoading={registerSubmission.isLoading}
+            loadingText="Inscription en cours..."
+            className='flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
           >
-            {isSubmitting ? 'Inscription en cours...' : "S'inscrire"}
-          </button>
+            S'inscrire
+          </LoadingButton>
         </div>
       </div>
     </form>

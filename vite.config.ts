@@ -11,4 +11,25 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['react', 'react-dom'],
+          router: ['react-router'],
+          ui: ['@radix-ui/react-select', '@radix-ui/react-label'],
+        },
+      },
+    },
+  },
+  // Configuration pour le serveur de développement
+  server: {
+    port: 5173,
+    host: true,
+  },
+  // Configuration pour la preview (après build)
+  preview: {
+    port: 4173,
+    host: true,
+  },
 })

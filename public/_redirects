@@ -1,0 +1,9 @@
+# Configuration Netlify pour SPA React
+# Redirection de toutes les routes vers index.html pour le routage côté client
+
+# Règle principale : rediriger toutes les routes non-existantes vers index.html
+/*    /index.html   200
+
+# Règles spécifiques pour les assets (optionnel, Netlify gère déjà bien cela)
+/assets/*   /assets/:splat   200
+/favicon.ico   /favicon.ico   200

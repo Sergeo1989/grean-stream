@@ -30,8 +30,8 @@ interface AutoLogoutProviderProps {
 
 export const AutoLogoutProvider: React.FC<AutoLogoutProviderProps> = ({
   children,
-  warningTime = 5 * 60 * 1000, // 25 minutes par défaut
-  logoutTime = 1 * 60 * 1000, // 1 minute par défaut
+  warningTime = 25 * 60 * 1000, // 25 minutes par défaut
+  logoutTime = 5 * 60 * 1000, // 5 minute par défaut
 }) => {
   const { showWarning, countdown, extendSession, handleAutoLogout } =
     useAutoLogout({

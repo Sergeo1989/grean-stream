@@ -1,54 +1,230 @@
-# React + TypeScript + Vite
+# Green Stream - Application de Gestion d'Énergie
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Application React moderne pour la gestion de recharges de compteurs électriques avec authentification et tableaux de bord.
 
-Currently, two official plugins are available:
+## 🚀 Démarrage rapide
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+# Installation des dépendances
+npm install
 
-## Expanding the ESLint configuration
+# Démarrage en développement
+npm run dev
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+# Build pour la production
+npm run build
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+# Aperçu de la version de production
+npm run preview
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 🏗️ Architecture
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- **Frontend**: React 19 + TypeScript
+- **Routage**: React Router v7
+- **UI**: Tailwind CSS v4 + Radix UI (shadcn/ui)
+- **État**: TanStack Query + React Context
+- **Build**: Vite avec code splitting optimisé
+- **Tests**: Vitest + Cypress
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
+## 📱 Fonctionnalités
+
+- ✅ **Authentification complète** (Login/Register)
+- ✅ **Dashboard responsive** avec statistiques
+- ✅ **Recharge de compteurs** multi-méthodes de paiement
+- ✅ **Historique paginé** des transactions
+- ✅ **Gestion de profil** utilisateur
+- ✅ **Validation robuste** des formulaires
+- ✅ **Alertes utilisateur** avec SweetAlert2
+
+## 🌐 Déploiement
+
+### Problème de routage SPA
+
+Les Single Page Applications nécessitent une configuration serveur spéciale pour que les URLs directes fonctionnent (ex: `/dashboard`).
+
+### Solutions automatisées
+
+```bash
+# Déploiement Apache (hébergement partagé)
+npm run deploy:apache
+
+# Déploiement Netlify
+npm run deploy:netlify
+
+# Déploiement Vercel
+npm run deploy:vercel
+
+# Déploiement Docker
+npm run deploy:docker
 ```
+
+### Plateformes supportées
+
+| Plateforme | Configuration | Statut |
+|------------|---------------|--------|
+| **Netlify** | `_redirects` | ✅ Auto |
+| **Vercel** | `vercel.json` | ✅ Auto |
+| **Apache** | `.htaccess` | ✅ Auto |
+| **Nginx** | `nginx.conf` | ✅ Manuel |
+| **Docker** | `Dockerfile` | ✅ Manuel |
+
+## 🔧 Configuration
+
+### Variables d'environnement
+
+```bash
+# API Base URL
+VITE_API_BASE_URL=http://www.gs.montviewfarm.net/api/
+
+# Environment
+VITE_ENV=production
+```
+
+### Alias de chemins
+
+```typescript
+// Utilisation des alias @
+import { Button } from '@/components/ui/button';
+import { showSuccess } from '@/lib/alerts';
+import { PaymentMethod } from '@/types/enums';
+```
+
+## 🎨 Composants
+
+### Architecture modulaire
+
+```
+src/
+├── components/
+│   ├── ui/              # Composants UI génériques
+│   ├── dashboard/       # Composants spécifiques au dashboard
+│   └── auth/           # Composants d'authentification
+├── hooks/              # Hooks personnalisés
+├── lib/                # Utilitaires et API
+├── types/              # Types TypeScript et enums
+└── pages/              # Pages principales
+```
+
+### Composants principaux
+
+- **FormField**: Composant de formulaire générique avec validation
+- **StatCard**: Cartes de statistiques avec shadcn/ui
+- **Pagination**: Pagination complète et accessible
+- **Dashboard**: Composants modulaires (Header, Tabs, Profile, etc.)
+
+## 🧪 Tests
+
+```bash
+# Tests unitaires
+npm run test
+
+# Tests avec couverture
+npm run test:coverage
+
+# Tests E2E interactifs
+npm run cy:open
+
+# Tests E2E en mode CI
+npm run test:e2e
+```
+
+## 📦 Scripts disponibles
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Serveur de développement |
+| `npm run build` | Build de production |
+| `npm run preview` | Aperçu du build |
+| `npm run lint` | Vérification ESLint |
+| `npm run deploy` | Déploiement Apache (JS, recommandé) |
+| `npm run deploy:apache` | Déploiement Apache |
+| `npm run deploy:netlify` | Déploiement Netlify |
+| `npm run deploy:vercel` | Déploiement Vercel |
+| `npm run deploy:docker` | Déploiement Docker |
+| `npm run deploy:bash` | Scripts bash (si Node.js problème) |
+| `npm run deploy:fix` | Corriger fins de ligne Windows |
+| `npm run docker:build` | Build de l'image Docker |
+| `npm run docker:run` | Lancement du conteneur |
+| `npm run serve` | Build + Preview |
+
+## 🐛 Dépannage
+
+### Erreur 404 sur les routes
+
+**Symptôme**: Accès direct à `/dashboard` retourne une erreur 404.
+
+**Solution**: Vérifier la configuration serveur :
+
+```bash
+# Test local
+npm run preview
+# Testez http://localhost:4173/dashboard
+
+# Vérification des fichiers de config
+ls -la dist/  # Vérifiez .htaccess ou _redirects
+```
+
+### Cache Vite obsolète
+
+**Symptôme**: Erreur "Outdated Optimize Dep"
+
+**Solution**:
+```bash
+rm -rf node_modules/.vite
+npm run dev
+```
+
+### Script de déploiement (Windows/WSL)
+
+**Symptôme**: Erreurs `$'\r': command not found` ou `node: not found`
+
+**Solutions**:
+```bash
+# Solution 1: Utiliser le script JavaScript (recommandé)
+npm run deploy:apache
+
+# Solution 2: Si vous préférez bash
+npm run deploy:fix          # Corriger les fins de ligne
+npm run deploy:bash:apache  # Utiliser bash
+```
+
+### Build qui échoue
+
+**Solution**:
+```bash
+# Nettoyage complet
+rm -rf node_modules dist
+npm install
+npm run build
+```
+
+## 📚 Documentation
+
+- [Guide de déploiement complet](./DEPLOYMENT.md)
+- [Configuration Vite](./vite.config.ts)
+- [Types et enums](./src/types/)
+
+## 🤝 Contribution
+
+1. Fork du projet
+2. Créer une branche feature
+3. Commit des changements
+4. Push vers la branche
+5. Créer une Pull Request
+
+## 📄 License
+
+MIT License - voir le fichier LICENSE pour plus de détails.
+
+## 🔗 Liens utiles
+
+- [React Router v7](https://reactrouter.com/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS v4](https://tailwindcss.com/)
+- [shadcn/ui](https://ui.shadcn.com/)
+- [TanStack Query](https://tanstack.com/query/)
+
+---
+
+**Green Stream** - Solution moderne de gestion d'énergie 🌱⚡

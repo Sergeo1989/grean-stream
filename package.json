@@ -11,7 +11,18 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "cy:open": "cypress open",
-    "test:e2e": "cypress run"
+    "test:e2e": "cypress run",
+    "deploy": "node scripts/deploy.js",
+    "deploy:netlify": "node scripts/deploy.js netlify",
+    "deploy:vercel": "node scripts/deploy.js vercel", 
+    "deploy:apache": "node scripts/deploy.js apache",
+    "deploy:docker": "node scripts/deploy.js docker",
+    "deploy:bash": "bash scripts/deploy.sh",
+    "deploy:bash:apache": "bash scripts/deploy.sh apache",
+    "deploy:fix": "dos2unix scripts/deploy.sh",
+    "docker:build": "docker build -t green-stream .",
+    "docker:run": "docker run -p 80:80 green-stream",
+    "serve": "npm run build && npm run preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",

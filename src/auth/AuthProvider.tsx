@@ -8,6 +8,7 @@ interface AuthContextType {
   user: User | null;
   setUser: React.Dispatch<React.SetStateAction<User | null>>;
   logout: () => Promise<void>;
+  refreshUser: () => Promise<void>;
   loading: boolean;
 }
 
@@ -28,10 +29,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const refreshUser = async (): Promise<void> => {
+    try {
+      const response = await api.getAxiosInstance().get<{ user: User }>('/auth/me');
+      setUser(response.data.user);
+    } catch (error) {
+      console.error('Erreur lors du rafraîchissement utilisateur', error);
+      setUser(null);
+    }
+  };
+
   const logout = async (): Promise<void> => {
     try {
       // Appel à l'API pour invalider le token côté serveur
-      await api.getAxiosInstance().post('/auth/logout');
+      await api.getAxiosInstance().post('/logout');
     } catch (error) {
       console.error('Erreur lors de la déconnexion', error);
     } finally {
@@ -65,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   }
 
   return (
-    <AuthContext.Provider value={{ user, setUser, logout, loading }}>
+    <AuthContext.Provider value={{ user, setUser, logout, refreshUser, loading }}>
       {children}
     </AuthContext.Provider>
   );
